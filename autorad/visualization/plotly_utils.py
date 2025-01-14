@@ -127,7 +127,8 @@ def plot_waterfall(
     y_true: Sequence[int],
     y_pred_proba: Sequence[float],
     threshold: float | None = None,
-    labels: Sequence[str] = ("positive", "negative"),
+    # labels: Sequence[str] = ("positive", "negative"),
+    labels: Sequence[str] = ("negative", "positive"),
 ):
     if threshold is None:
         threshold = roc_utils.get_youden_threshold(y_true, y_pred_proba)
@@ -143,7 +144,8 @@ def plot_waterfall(
         x=range(len(y_true)),  # "plotly_index",
         y="y_pred",
         color="y_true",
-        color_discrete_sequence=("red", "green"),
+        # color_discrete_sequence=("red", "green"),
+        color_discrete_sequence=("green", "red"),
         labels={
             "y_pred": "Predicted score relative to threshold",
             "y_true": "",

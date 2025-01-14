@@ -67,7 +67,7 @@ class AnovaSelector(CoreSelector):
 
 
 class LassoSelector(CoreSelector):
-    def __init__(self, alpha=0.002):
+    def __init__(self, alpha=0.05):
         self.model = Lasso(random_state=config.SEED, alpha=alpha)
         super().__init__()
 
@@ -98,7 +98,7 @@ class LassoSelector(CoreSelector):
 
 
 class BorutaSelector(CoreSelector):
-    def fit(self, X, y, verbose=0):
+    def fit(self, X, y, verbose=2):
         model = BorutaPy(
             RandomForestClassifier(
                 max_depth=5, n_jobs=-1, random_state=config.SEED
@@ -106,13 +106,16 @@ class BorutaSelector(CoreSelector):
             n_estimators="auto",
             verbose=verbose,
             random_state=config.SEED,
+            max_iter = 100 
         )
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             model.fit(X.to_numpy(), y.to_numpy())
         selected_columns = np.where(model.support_)[0].tolist()
         if not selected_columns:
-            raise ValueError("Boruta failed to select features.")
+            selected_columns = np.where(model.support_weak_)[0].tolist()
+            if not selected_columns:  
+                raise ValueError("Boruta failed to select features.")
         self._selected_features = X.columns[selected_columns].tolist()
 
 

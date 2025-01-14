@@ -91,5 +91,6 @@ def open_mlflow_dashboard(experiment_name="model_training", port=8000):
 def log_dict_as_artifact(data: dict, artifact_name: str):
     with tempfile.TemporaryDirectory() as tmp_dir:
         tmp_path = Path(tmp_dir) / f"{artifact_name}.yaml"
+        # tmp_path = Path('feature_extraction') / f"{artifact_name}.yaml"
         io.save_yaml(data, tmp_path)
         mlflow.log_artifact(str(tmp_path))
